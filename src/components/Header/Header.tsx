@@ -14,13 +14,17 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
 import { useSession, signIn, signOut } from 'next-auth/react';
+import Themetoggle from '@/components/Themetoggle';
+import { useMediaQuery } from '@mui/material';
 
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+export type HeaderProps = {
+  ColorModeContext: React.Context<{ toggleColorMode: ()=> void; }> 
+}
 
-export default function Header() {
+export default function Header(props:HeaderProps) {
   const {data:session} = useSession();
+  const {ColorModeContext} = props;
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -39,9 +43,9 @@ export default function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
+  const tabletCheck = useMediaQuery('(min-width:768px)')
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{marginBottom:"40px"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -60,7 +64,7 @@ export default function Header() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            Apersonel
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -74,28 +78,7 @@ export default function Header() {
             >
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+    
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
@@ -114,20 +97,17 @@ export default function Header() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            Apersonel
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-          <Box sx={{marginRight:5}}><Typography>Signed in as {session?.user?.email}</Typography></Box>
+
+          {
+            tabletCheck && (
+              <Box sx={{marginRight:5, marginLeft: 'auto' }}><Typography>Signed in as {session?.user?.email}</Typography></Box>
+            )
+          }
+
+
+          <Themetoggle ColorModeContext={ColorModeContext}/>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

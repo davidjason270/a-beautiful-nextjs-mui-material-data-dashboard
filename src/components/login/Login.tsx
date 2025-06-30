@@ -1,17 +1,18 @@
-import React from "react";
-import { useSession, signIn, signOut } from 'next-auth/react';
-import { Avatar, Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
+import { signIn, signOut, useSession } from "next-auth/react";
 
-export default function Login()
-{
+
+const Login =()=>{
     const {data:session} = useSession();
     if(session){
         return <>
-            <Button variant="contained" color="error" onClick={()=>signOut()} >Logout</Button>
+            <Button variant={'contained'} color={'error'} onClick={()=>signOut()}>Sign Out</Button>
         </>
     }
+
     return <>
-        <Typography variant="h2">Please, login</Typography>
-        <Button variant="contained" color="success" onClick={()=>signIn()} >Login</Button>
+        <Button variant={'contained'} color={'success'} onClick={()=>signIn()}>Sign In</Button>
     </>
 }
+
+export default Login;
